@@ -12,7 +12,7 @@ $conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(5
 $credential = $_POST['credential'] ?? $_POST['id_token'] ?? '';
 
 if (empty($credential)) {
-    header('Location: ../login.html?error=no_credential');
+    header('Location: https://check-list-bice.vercel.app/login.html?error=no_credential');
     exit;
 }
 
@@ -29,7 +29,7 @@ function decodeJWT($token) {
 $payload = decodeJWT($credential);
 
 if (!$payload || empty($payload['email'])) {
-    header('Location: ../login.html?error=invalid_token');
+    header('Location: https://check-list-bice.vercel.app/login.html?error=invalid_token');
     exit;
 }
 
@@ -40,7 +40,7 @@ $picture = $payload['picture'] ?? '';
 // Validate email domain
 $domain = substr(strrchr($email, '@'), 1);
 if ($domain !== '247ga.co') {
-    header('Location: ../login.html?error=invalid_domain');
+    header('Location: https://check-list-bice.vercel.app/login.html?error=invalid_domain');
     exit;
 }
 
@@ -54,7 +54,7 @@ $user = $result->fetch_assoc();
 if ($user) {
     // Existing user - check if active
     if (!$user['is_active']) {
-        header('Location: ../login.html?error=account_deactivated');
+        header('Location: https://check-list-bice.vercel.app/login.html?error=account_deactivated');
         exit;
     }
     
@@ -70,7 +70,7 @@ if ($user) {
     $stmt->bind_param('sss', $email, $name, $picture);
     
     if (!$stmt->execute()) {
-        header('Location: ../login.html?error=registration_failed');
+        header('Location: https://check-list-bice.vercel.app/login.html?error=registration_failed');
         exit;
     }
     
@@ -86,6 +86,6 @@ $_SESSION['user_picture'] = $picture;
 $conn->close();
 
 // Redirect to main app
-header('Location: ../index.html');
+header('Location: https://check-list-bice.vercel.app/index.html');
 exit;
 ?>

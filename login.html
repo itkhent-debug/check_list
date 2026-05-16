@@ -478,16 +478,15 @@
 
         // Custom Google button click handler - direct OAuth redirect
         document.getElementById('customGoogleBtn').addEventListener('click', function() {
-            const clientId = '326291537602-3hkauop1u7go6qik6tntlsivq8frgb5j.apps.googleusercontent.com';
-            const redirectUri = encodeURIComponent(`${window.location.origin}/api/google_callback.php`);
-            const scope = encodeURIComponent('openid email profile');
-            const nonce = Math.random().toString(36).substring(2);
-            
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&response_mode=form_post&scope=${scope}&nonce=${nonce}&prompt=select_account`;
-            
-            window.location.href = authUrl;
-        });
-
+    const clientId = '326291537602-3hkauop1u7go6qik6tntlsivq8frgb5j.apps.googleusercontent.com';
+    const redirectUri = encodeURIComponent('https://checklist-production-0a17.up.railway.app/api/google_callback.php');
+    const scope = encodeURIComponent('openid email profile');
+    const nonce = Math.random().toString(36).substring(2);
+    
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&response_mode=form_post&scope=${scope}&nonce=${nonce}&prompt=select_account`;
+    
+    window.location.href = authUrl;
+});
         // Decode JWT token
         function decodeJWT(token) {
             const base64Url = token.split('.')[1];

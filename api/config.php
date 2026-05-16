@@ -5,11 +5,34 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Database Configuration - Railway/Vercel compatible
-$envDbHost = getenv('MYSQLHOST') ?: getenv('MYSQL_HOST');
-$envDbUser = getenv('MYSQLUSER') ?: getenv('MYSQL_USER');
-$envDbPass = getenv('MYSQLPASSWORD') ?: getenv('MYSQL_PASSWORD');
-$envDbName = getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE');
-$envDbPort = getenv('MYSQLPORT') ?: getenv('MYSQL_PORT');
+$envDbHost = getenv('MYSQLHOST') ?: getenv('MYSQL_HOST') ?: getenv('RAILWAY_MYSQL_HOST');
+$envDbUser = getenv('MYSQLUSER') ?: getenv('MYSQL_USER') ?: getenv('RAILWAY_MYSQL_USER');
+$envDbPass = getenv('MYSQLPASSWORD') ?: getenv('MYSQL_PASSWORD') ?: getenv('RAILWAY_MYSQL_PASSWORD');
+$envDbName = getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: getenv('RAILWAY_MYSQL_DATABASE');
+$envDbPort = getenv('MYSQLPORT') ?: getenv('MYSQL_PORT') ?: getenv('RAILWAY_MYSQL_PORT');
+
+// Parse connection URLs if Railway or Vercel provides them as a single string.
+$databaseUrl = getenv('MYSQL_PUBLIC_URL') ?: getenv('MYSQL_URL') ?: getenv('DATABASE_URL') ?: getenv('MYSQL_DATABASE_URL');
+if ($databaseUrl) {
+    $parsedUrl = parse_url($databaseUrl);
+    if ($parsedUrl !== false) {
+        if (!empty($parsedUrl['host'])) {
+            $envDbHost = $parsedUrl['host'];
+        }
+        if (!empty($parsedUrl['user'])) {
+            $envDbUser = $parsedUrl['user'];
+        }
+        if (isset($parsedUrl['pass'])) {
+            $envDbPass = $parsedUrl['pass'];
+        }
+        if (!empty($parsedUrl['path'])) {
+            $envDbName = ltrim($parsedUrl['path'], '/');
+        }
+        if (!empty($parsedUrl['port'])) {
+            $envDbPort = $parsedUrl['port'];
+        }
+    }
+}
 
 define('DB_HOST', $envDbHost ?: 'localhost');
 define('DB_USER', $envDbUser ?: 'root');

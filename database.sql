@@ -69,7 +69,3 @@ CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_login DATETIME DEFAULT NULL
 );
-
--- Default user (password: 247ga2024)
-INSERT IGNORE INTO users (email, name, password_hash) VALUES
-('paul.valencia@247ga.co', 'Paul Valencia', '$2y$10$placeholder_run_auth_endpoint_to_seed');
